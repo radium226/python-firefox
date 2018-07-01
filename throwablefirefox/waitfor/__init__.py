@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
-ef wait_for(condition):
+from time import sleep
+
+def wait_for(condition):
     while True:
         try:
             result = condition()

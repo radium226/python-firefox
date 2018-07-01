@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 
+from throwablefirefox.shell import execute, kill
+from throwablefirefox.waitfor import wait_for
+
+from pathlib import Path
+from colorama import Back, Fore, Style
+
+
 class OpenVPN:
 
     CONFIG_FOLDER_PATH = Path("/etc/openvpn/client")
@@ -34,4 +41,4 @@ class OpenVPN:
         kill(self.process, sudo=True, group=True)
 
     def wait(self):
-        self.process.wait() 
+        self.process.wait()

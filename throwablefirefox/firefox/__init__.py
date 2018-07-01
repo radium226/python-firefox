@@ -1,7 +1,10 @@
 #!/bin/env python
 
+from .profile import *
+from .bookmark import *
+from .extension import *
+
 from pathlib import Path
-from vpnshift import execute
 from tempfile import mkdtemp
 from configparser import ConfigParser
 import shutil
@@ -51,50 +54,3 @@ class Firefox:
     def stop(self):
         print(Fore.RED + "Stopping Firefox... " + Style.RESET_ALL)
         kill(self.process, sudo=True, group=True)
-
-
-
-
-if __name__ == "__main__":
-    bookmarks = [
-
-    ]
-
-    urls = [
-        IP_ADDON_URL,
-        ADBLOCK_ADDON_URL
-    ]
-
-    #extension = Extension("/tmp/tmpk4a0gvdo/show_external_ip-1.0.6-an+fx.xpi")
-    #print(extension.id)
-
-    with NetworkNamespace(name="toto") as network_namespace:
-        with OpenVPN(network_namespace=network_namespace, country="Sweden"):
-            with Profile.throwable(network_namespace=network_namespace) as profile:
-                for url in urls:
-                    extension = Extension.download(url)
-                    profile.install_extension(extension, pre_start=True)
-
-                for bookmark in bookmarks:
-                    profile.add_bookmark(bookmark)
-
-                firefox = Firefox.start(profile, private=True)
-                firefox.wait()
-
-    #with Profile.throwable() as profile:
-    #    firefox = Firefox.start(profile, headless=True)
-    #    sleep(10)
-    #    firefox.stop()
-    #    sleep(1)
-    #
-    #    profile.add_bookmark(Bookmark("https://www.girlswithmuscle.com/", "Girls with Muscles"))
-
-
-    #    firefox = Firefox.start(profile, private=True)
-    #    firefox.wait()
-
-    #with NetworkNamespace(name="toto") as network_namespace:
-    #    execute(["sh", "-c", "id -nu ; echo ${HOME} ; echo"])
-    #    execute(["sh", "-c", "id -nu ; echo ${HOME} ; echo"], sudo=True)
-    #    execute(["sh", "-c", "id -nu ; echo ${HOME} ; echo"], network_namespace=network_namespace)
-    #    execute(["sh", "-c", "id -nu ; echo ${HOME} ; echo"], network_namespace=network_namespace, sudo=True)

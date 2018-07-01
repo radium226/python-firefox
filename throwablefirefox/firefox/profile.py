@@ -1,5 +1,26 @@
 #!/usr/bin/env python
 
+from pathlib import Path
+from tempfile import mkdtemp
+from configparser import ConfigParser
+import shutil
+from time import sleep
+from urllib.request import urlretrieve
+from urllib.parse import urlparse
+import os
+import subprocess as sp
+import sqlite3
+from colorama import Fore, Back, Style
+
+from throwablefirefox.shell import execute
+
+import json
+
+from zipfile import ZipFile
+
+from pyasn1.codec.der import decoder as der_decoder
+from pyasn1_modules import rfc5652, rfc2315, rfc5280
+
 class Profile:
 
     INI_PATH = Path.home() / ".mozilla" / "firefox" / "profiles.ini"

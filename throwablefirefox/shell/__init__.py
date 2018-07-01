@@ -4,7 +4,7 @@ import subprocess as sp
 import getpass
 from pathlib import Path
 import os
-
+from signal import *
 
 def mkdir(folder_path, sudo=False):
     execute(["mkdir", "-p", str(folder_path)], sudo=sudo)
