@@ -10,8 +10,12 @@ setup(
     license="GPL",
     zip_safe=True,
     install_requires=[],
-    scripts=["scripts/throwable-firefox"],
+    scripts=[
+        "scripts/throwable-firefox",
+        "scripts/download-torrent" 
+    ],
     packages=[
+        "throwablefirefox",
         "throwablefirefox.firefox",
         "throwablefirefox.ipchecker",
         "throwablefirefox.networknamespace",

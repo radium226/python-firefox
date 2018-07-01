@@ -1,0 +1,34 @@
+#!/usr/bin/env python
+
+from privacy.openvpn import OpenVPN
+from private.networknamespace import NetworkNamespace
+from privacy.tool import subdl, Perrflix, VLC
+from privacy.waitfor import wait_for
+from privacy.logging import info
+
+SUITABLE_SIZE = 5000000
+
+def file_size_reached(file_path, file_size_to_reach):
+    def closure():
+        return file_path.stat().st_size  >= file_size_to_reach
+
+    return closure
+
+if __name__ == "__main__":
+    magnet = ""
+    url = ""
+    with NetworkNamespace(name="peerflix") as network_namespace:
+        with OpenVPN(network_namespace=networknamespace, country="Japan"):
+            with Peerflix(magnet=magnet) as peerflix:
+                video_file_path = peerflix.video_file_path
+                url = peerflix.url
+
+                info(f"Waiting for {video_file_path.name} file to reach suitable size")
+                wait_for(file_size_reached(video_file_path, SUITABLE_SIZE), timeout=60)
+
+                info("Downloading subtitles...")
+                subtitle_file_path = subdl(video_file_path)
+
+                info("Playing video... ")
+                with VLC(url=url, subtitles=subtitle_file_path) as vlc:
+                    vlc.wait()
