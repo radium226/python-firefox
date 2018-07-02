@@ -18,20 +18,22 @@ if __name__ == "__main__":
     magnet = sys.argv[1]
 
     with NetworkNamespace(name="peerflix") as network_namespace:
-        with OpenVPN(network_namespace=network_namespace, country="Sweden"):
+        with OpenVPN(network_namespace=network_namespace, country="Japan"):
             ip = IPChecker.for_torrent(network_namespace=network_namespace)
             country = IPChecker.country_by_ip(ip)
-
             print(f"{Fore.GREEN}Checking IP (ip={ip}, country={country})...{Style.RESET_ALL}")
 
-            with Peerflix(magnet=magnet) as peerflix:
+            with Peerflix(magnet=magnet, network_namespace=network_namespace) as peerflix:
                 url = peerflix.url
 
                 info(f"Waiting for video file to reach suitable size")
                 wait_for(lambda: peerflix.video_file_path.stat().st_size  >= SUITABLE_SIZE, timeout=60)
 
-                info("Downloading subtitles...")
-                subtitles_file_path = subdl(peerflix.video_file_path)
+                try:
+                    info("Downloading subtitles...")
+                    subtitles_file_path = subdl(peerflix.video_file_path)
+                except:
+                    subtitles_file_path = None
 
                 info("Playing video... ")
                 vlc = VLC(url=url, subtitles_file_path=subtitles_file_path)

@@ -57,7 +57,7 @@ class Peerflix:
 
     def start(self):
         print(Fore.RED + "Starting Peerflix... " + Style.RESET_ALL)
-        self.process = execute(["peerflix", "-q", "-f", ".", self.magnet], network_namespace=self.network_namespace, background=True)
+        self.process = execute(["peerflix", "-f", ".", "-q", ".", self.magnet], network_namespace=self.network_namespace, background=True)
         wait_for(port_opened("localhost", 8888))
 
     @property

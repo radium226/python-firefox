@@ -34,7 +34,7 @@ class IPChecker:
                 break
             #else:
             #    print(line)
-        kill(process, sudo=True)
+        kill(process, sudo=True, signal = signal.SIGKILL)
         return ip
 
 if __name__ == "__main__":
