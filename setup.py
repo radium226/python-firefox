@@ -21,6 +21,7 @@ setup(
         "throwablefirefox.networknamespace",
         "throwablefirefox.openvpn",
         "throwablefirefox.shell",
-        "throwablefirefox.waitfor"
+        "throwablefirefox.waitfor",
+        "throwablefirefox.tools"
     ]
 )
