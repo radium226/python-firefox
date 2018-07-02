@@ -12,7 +12,7 @@ setup(
     install_requires=[],
     scripts=[
         "scripts/throwable-firefox",
-        "scripts/download-torrent" 
+        "scripts/stream-torrent"
     ],
     packages=[
         "throwablefirefox",

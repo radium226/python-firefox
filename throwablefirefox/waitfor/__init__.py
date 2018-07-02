@@ -2,7 +2,7 @@
 
 from time import sleep
 
-def wait_for(condition):
+def wait_for(condition, timeout=None):
     while True:
         try:
             result = condition()

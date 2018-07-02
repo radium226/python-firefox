@@ -26,7 +26,7 @@ def kill(process, signal=SIGTERM, sudo=False, group=False):
         execute(["kill", f"-{signal}", str(pid)], sudo=sudo)
 
 
-def execute(command, success_exit_codes=[0], sudo=False, network_namespace=None, background=False, stdin=None, stdout=None):
+def execute(command, success_exit_codes=[0], sudo=False, network_namespace=None, background=False, stdin=None, stdout=None, in_folder=None):
     before_command = []
     if network_namespace:
         user = getpass.getuser()
@@ -35,7 +35,7 @@ def execute(command, success_exit_codes=[0], sudo=False, network_namespace=None,
     if sudo:
         before_command = before_command + ["sudo", "-E"]
 
-    process = sp.Popen(before_command + command, stdin=stdin, stdout=stdout, start_new_session=True)
+    process = sp.Popen(before_command + command, stdin=stdin, stdout=stdout, start_new_session=True, cwd=str(in_folder) if in_folder else None)
     if background:
         return process
     else:
