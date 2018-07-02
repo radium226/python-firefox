@@ -6,6 +6,7 @@ import signal
 import os
 import re
 from geolite2 import geolite2
+from throwablefirefox.shell import execute, kill
 
 CHECK_IP_MAGNET = "magnet:?xt=urn:btih:24dcde05861586954f32e871a754fcc06fbb36a6&dn=checkmyiptorrent&tr=http%3A%2F%2F34.204.227.31%2Fcheckmytorrentipaddress.php"
 
@@ -21,9 +22,11 @@ class IPChecker:
         return t["country"]["iso_code"]
 
     @classmethod
-    def for_torrent(cls):
-        process = sp.Popen(["aria2c", CHECK_IP_MAGNET], stdout=sp.PIPE, preexec_fn=os.setsid)
+    def for_torrent(cls, network_namespace=None):
+        print(" --> for_torrent")
+        process = execute(["aria2c", CHECK_IP_MAGNET], stdout=sp.PIPE, network_namespace=network_namespace, background=True)
         for line in filter(lambda line: line, map(lambda line: line.strip(), map(lambda line_in_bytes: line_in_bytes.decode("utf-8"), iter(process.stdout.readline, b"")))):
+            print(" --> line=" + line)
             groups = re.search(CHECK_IP_REGEX, line)
             ip = None
             if groups:
@@ -31,8 +34,7 @@ class IPChecker:
                 break
             #else:
             #    print(line)
-        process_group_id = os.getpgid(process.pid)
-        os.killpg(process_group_id, signal.SIGINT)
+        kill(process, sudo=True)
         return ip
 
 if __name__ == "__main__":

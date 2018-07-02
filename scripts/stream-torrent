@@ -4,6 +4,7 @@ from throwablefirefox.openvpn import OpenVPN
 from throwablefirefox.networknamespace import NetworkNamespace
 from throwablefirefox.tools import subdl, Peerflix, VLC
 from throwablefirefox.waitfor import wait_for
+from throwablefirefox.ipchecker import IPChecker
 from colorama import Fore, Back, Style
 import sys
 
@@ -18,6 +19,11 @@ if __name__ == "__main__":
 
     with NetworkNamespace(name="peerflix") as network_namespace:
         with OpenVPN(network_namespace=network_namespace, country="Sweden"):
+            ip = IPChecker.for_torrent(network_namespace=network_namespace)
+            country = IPChecker.country_by_ip(ip)
+
+            print(f"{Fore.GREEN}Checking IP (ip={ip}, country={country})...{Style.RESET_ALL}")
+
             with Peerflix(magnet=magnet) as peerflix:
                 url = peerflix.url
 
