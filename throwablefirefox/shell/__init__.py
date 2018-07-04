@@ -17,7 +17,7 @@ def tee(content, file_path, append=False, sudo=False):
     tee_process.wait()
 
 
-def kill(process, signal=SIGTERM, sudo=False, group=False):
+def kill(process, signal=SIGTERM, sudo=False, group=True):
     pid = process.pid
     if group:
         pgid = os.getpgid(process.pid)

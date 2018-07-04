@@ -3,7 +3,7 @@
 from throwablefirefox.shell import execute, kill
 from pathlib import Path
 import os
-from throwablefirefox.waitfor import wait_for
+from throwablefirefox.waitfor import wait_for, local_port_opened
 import socket
 from colorama import Fore, Back, Style
 
@@ -58,7 +58,8 @@ class Peerflix:
     def start(self):
         print(Fore.RED + "Starting Peerflix... " + Style.RESET_ALL)
         self.process = execute(["peerflix", "-f", ".", "-q", ".", self.magnet], network_namespace=self.network_namespace, background=True)
-        wait_for(port_opened("localhost", 8888))
+        wait_for(local_port_opened(8888, network_namespace=self.network_namespace))
+        print("Here we go! ")
 
     @property
     def url(self):
@@ -71,4 +72,4 @@ class Peerflix:
 
     def stop(self):
         print(Fore.RED + "Stopping Peerflix... " + Style.RESET_ALL)
-        kill(self.process)
+        kill(self.process, sudo=True)

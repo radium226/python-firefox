@@ -36,6 +36,6 @@ if __name__ == "__main__":
                     subtitles_file_path = None
 
                 info("Playing video... ")
-                vlc = VLC(url=url, subtitles_file_path=subtitles_file_path)
+                vlc = VLC(url=url, subtitles_file_path=subtitles_file_path, network_namespace=network_namespace)
                 vlc.start()
                 vlc.wait()
