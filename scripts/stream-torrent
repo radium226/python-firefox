@@ -19,8 +19,9 @@ if __name__ == "__main__":
 
     with NetworkNamespace(name="peerflix") as network_namespace:
         with OpenVPN(network_namespace=network_namespace, country="Japan"):
-            ip = IPChecker.for_torrent(network_namespace=network_namespace)
-            country = IPChecker.country_by_ip(ip)
+            ip_checker = IPChecker.for_torrent(network_namespace=network_namespace)
+            ip = ip_checker.ip
+            country = ip_checker.country
             print(f"{Fore.GREEN}Checking IP (ip={ip}, country={country})...{Style.RESET_ALL}")
 
             with Peerflix(magnet=magnet, network_namespace=network_namespace) as peerflix:
