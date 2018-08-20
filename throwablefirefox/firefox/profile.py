@@ -135,13 +135,13 @@ class ThrowableProfile:
             firefox.stop()
             sleep(1)
 
-            #with (self.folder_path / "extensions.json").open("r") as extensions_file:
-            #    extensions = json.load(extensions_file)
-            #    for addon in extensions["addons"]:
-            #        print(addon)
-            #        addon["seen"] = True
-            #        addon["userDisabled"] = False
-            #        addon["active"] = True
+        with (self.folder_path / "extensions.json").open("r") as extensions_file:
+            extensions = json.load(extensions_file)
+            for addon in extensions["addons"]:
+                print(addon)
+                addon["seen"] = True
+                addon["userDisabled"] = False
+                addon["active"] = True
 
 
             #with (self.folder_path / "extensions.json").open("w") as extensions_file:

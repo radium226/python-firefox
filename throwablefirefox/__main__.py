@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
-from throwablefirefox.firefox import Firefox, Profile
+from throwablefirefox.firefox import Firefox, Profile, Bookmark
 from throwablefirefox.networknamespace import NetworkNamespace
 from throwablefirefox.openvpn import OpenVPN
 from throwablefirefox.ipchecker import IPChecker
 from throwablefirefox.pia import PIA
+from time import sleep
 
 if __name__ == "__main__":
     real_ip_checker = IPChecker.for_http(network_namespace=None)
@@ -16,5 +17,8 @@ if __name__ == "__main__":
                     raise Error("IP is not hidden")
                 else:
                     print(f" ==> country={hidden_ip_checker.country}")
-                firefox = Firefox.start(profile, private=True)
+
+                Firefox.configure(profile)
+
+                firefox = Firefox.start(profile, private=True, url="https://duckduckgo.com")
                 firefox.wait()

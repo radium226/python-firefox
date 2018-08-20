@@ -3,6 +3,7 @@
 from .profile import *
 from .bookmark import *
 from .extension import *
+from throwablefirefox.shell import kill
 
 from pathlib import Path
 from tempfile import mkdtemp
@@ -23,6 +24,8 @@ from zipfile import ZipFile
 
 from pyasn1.codec.der import decoder as der_decoder
 from pyasn1_modules import rfc5652, rfc2315, rfc5280
+import json
+from pathlib import Path
 
 IP_ADDON_URL = "https://addons.mozilla.org/firefox/downloads/file/776591/show_external_ip-1.0.6-an+fx.xpi"
 ADBLOCK_ADDON_URL = "https://addons.mozilla.org/firefox/downloads/file/957947/adblock_plus-3.1-an+fx.xpi?src=dp-btn-primary"
@@ -38,6 +41,29 @@ class Firefox:
 
     def wait(self):
         self.process.wait()
+
+    @classmethod
+    def configure(cls, profile):
+        config_file_path = Path.home() / ".config" / "throwable-firefox.conf"
+        if config_file_path.exists():
+            firefox = cls.start(profile, private=False, headless=True)
+            sleep(5)
+            firefox.stop()
+
+            with config_file_path.open("r") as config_file:
+                config = json.loads(config_file.read())
+                print(config)
+                for bookmark in config["bookmarks"]:
+                    profile.add_bookmark(Bookmark(bookmark["url"], bookmark["title"]))
+
+                for extension_url in config["extensions"]:
+                    extension = Extension.download(extension_url)
+                    profile.install_extension(extension)
+
+                firefox = cls.start(profile, private=False, headless=True)
+                sleep(5)
+                firefox.stop()
+                sleep(5)
 
     @classmethod
     def start(cls, profile, headless=False, private=False, url=None):

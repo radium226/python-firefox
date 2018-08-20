@@ -1,5 +1,16 @@
 #!/usr/bin/env python
 
+from colorama import Fore, Back, Style
+import os
+from urllib.parse import urlparse
+from urllib.request import urlretrieve
+from tempfile import mkdtemp
+from zipfile import ZipFile
+import subprocess as sp
+
+from throwablefirefox.shell import execute
+
+
 class Extension:
 
     def __init__(self, xpi_file_path):
