@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from pathlib import Path
-from tempfile import mkdtemp
+from tempfile import mkdtemp, gettempdir
 from configparser import ConfigParser
 import shutil
 from time import sleep
@@ -11,6 +11,7 @@ import os
 import subprocess as sp
 import sqlite3
 from colorama import Fore, Back, Style
+import tempfile
 
 from throwablefirefox.shell import execute
 
@@ -32,13 +33,15 @@ class Profile:
 
 class ThrowableProfile:
 
-    BASE_FOLDER_PATH = Path("./profiles")
+    BASE_FOLDER_PATH = Path(gettempdir()) / "throwable-firefox" / "profiles"
 
     NAME = "Private"
 
     @classmethod
     def random_folder_path(cls):
-        return Path(mkdtemp(dir=str(ThrowableProfile.BASE_FOLDER_PATH)))
+        ThrowableProfile.BASE_FOLDER_PATH.mkdir(parents=True, exist_ok=True)
+        folder_path = Path(mkdtemp(dir=str(ThrowableProfile.BASE_FOLDER_PATH)))
+        return folder_path
 
     def __init__(self, network_namespace=None):
         self.folder_path = ThrowableProfile.random_folder_path()

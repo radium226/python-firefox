@@ -43,7 +43,7 @@ class Firefox:
         self.process.wait()
 
     @classmethod
-    def configure(cls, profile):
+    def configure(cls, profile, bookmarks=False, extensions=False):
         config_file_path = Path.home() / ".config" / "throwable-firefox.conf"
         if config_file_path.exists():
             firefox = cls.start(profile, private=False, headless=True)
@@ -53,12 +53,14 @@ class Firefox:
             with config_file_path.open("r") as config_file:
                 config = json.loads(config_file.read())
                 print(config)
-                for bookmark in config["bookmarks"]:
-                    profile.add_bookmark(Bookmark(bookmark["url"], bookmark["title"]))
+                if bookmarks:
+                    for bookmark in config["bookmarks"]:
+                        profile.add_bookmark(Bookmark(bookmark["url"], bookmark["title"]))
 
-                for extension_url in config["extensions"]:
-                    extension = Extension.download(extension_url)
-                    profile.install_extension(extension)
+                if extensions:
+                    for extension_url in config["extensions"]:
+                        extension = Extension.download(extension_url)
+                        profile.install_extension(extension)
 
                 firefox = cls.start(profile, private=False, headless=True)
                 sleep(5)

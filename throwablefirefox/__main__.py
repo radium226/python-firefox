@@ -18,7 +18,7 @@ if __name__ == "__main__":
                 else:
                     print(f" ==> country={hidden_ip_checker.country}")
 
-                Firefox.configure(profile)
+                Firefox.configure(profile, bookmarks=True, extensions=True)
 
                 firefox = Firefox.start(profile, private=True, url="https://duckduckgo.com")
                 firefox.wait()
